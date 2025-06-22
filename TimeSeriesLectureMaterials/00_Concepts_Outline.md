@@ -1,0 +1,133 @@
+# Time Series Analysis Course: Concepts & Use Cases Outline
+
+This document outlines the core concepts and use cases for each topic covered in the three-part Time Series Analysis course.
+
+## Class 1: Introduction to the Basics of Time Series Analysis
+
+**1. Introduction to Time Series Analysis**
+*   **Concept:** Time series data consists of observations recorded sequentially over time. Key characteristics include time dependency (order matters), potential presence of trend (long-term increase/decrease), seasonality (patterns repeating over a fixed period, e.g., daily, weekly, yearly), cycles (longer-term fluctuations not of a fixed period), and irregular fluctuations or noise. Understanding these components is crucial for analysis and forecasting.
+*   **Use Cases:** Forecasting product sales for inventory management, predicting stock market prices for investment strategies, analyzing climate data for environmental studies, monitoring vital signs (e.g., heart rate) in healthcare, tracking website traffic for resource planning.
+
+**2. Time Series Data Pre-processing**
+*   **Concept:** Preparing raw time series data for modeling. Common steps include:
+    *   *Handling Missing Values:* Techniques like forward fill (ffill), backward fill (bfill), linear interpolation, or more sophisticated imputation methods based on surrounding data points.
+    *   *Handling Outliers:* Identifying and addressing extreme values that can distort analysis, possibly through removal, capping, or transformation.
+    *   *Data Transformation:* Applying mathematical functions (e.g., logarithm, square root, Box-Cox) to stabilize variance, normalize distribution, or make relationships more linear.
+    *   *Resampling:* Changing the data frequency, either by aggregating data to a lower frequency (downsampling, e.g., daily to monthly) or increasing frequency (upsampling, e.g., monthly to daily, often requiring interpolation).
+*   **Use Cases:** Cleaning noisy sensor readings before analysis, ensuring consistent time intervals in financial data, stabilizing variance in economic time series, aligning data collected at different frequencies.
+
+**3. Moving Averages (MA)**
+*   **Concept:** A technique to smooth out short-term fluctuations and highlight longer-term trends or cycles. 
+    *   *Simple Moving Average (SMA):* Calculates the average of a fixed number of past observations. Gives equal weight to all observations in the window.
+    *   *Weighted Moving Average (WMA):* Assigns different weights to observations in the window, typically giving more weight to recent observations.
+*   **Use Cases:** Identifying underlying trends in volatile stock prices, smoothing sales data to see seasonal patterns more clearly, technical analysis indicators in finance (e.g., crossovers).
+
+**4. Exponential Smoothing (ES)**
+*   **Concept:** A forecasting method that assigns exponentially decreasing weights to older observations, meaning more recent observations have greater influence. Different variations exist:
+    *   *Simple Exponential Smoothing (SES):* For data with no trend or seasonality.
+    *   *Holt's Linear Trend Model:* Extends SES to handle data with a trend.
+    *   *Holt-Winters' Seasonal Model:* Extends Holt's model to incorporate seasonality (both additive and multiplicative seasonality).
+*   **Use Cases:** Short-term forecasting of product demand, inventory control, predicting server load or website traffic, forecasting utility consumption.
+
+**5. Decomposition**
+*   **Concept:** Breaking down a time series into its constituent components: Trend (T), Seasonality (S), and Residual/Irregular component (R). Common models are additive (Y = T + S + R) and multiplicative (Y = T * S * R). Methods include classical decomposition and more advanced techniques like STL (Seasonal and Trend decomposition using Loess).
+*   **Use Cases:** Understanding the relative importance of trend and seasonality in sales figures, deseasonalizing data to analyze underlying growth, identifying anomalies or unusual events in the residual component, providing insights for forecasting.
+
+**6. White Noise, Random Walk, Stationarity**
+*   **Concept:**
+    *   *White Noise:* A series with zero mean, constant variance, and no autocorrelation (observations are independent). It's essentially random noise.
+    *   *Random Walk:* A process where the current value is equal to the previous value plus a white noise error term. Random walks are non-stationary and unpredictable in the long run.
+    *   *Stationarity:* A crucial property where the statistical characteristics (mean, variance, autocorrelation) of the series remain constant over time. Many time series models assume stationarity.
+*   **Use Cases:** White noise serves as a benchmark (if residuals are white noise, the model captured the predictable patterns), the random walk hypothesis is often used to model stock prices, stationarity is a prerequisite for applying ARMA/ARIMA models (or requires differencing to achieve).
+
+**7. Augmented Dickey Fuller (ADF) Test**
+*   **Concept:** A statistical hypothesis test used to check for stationarity. Specifically, it tests the null hypothesis that a unit root is present in the time series (implying non-stationarity). If the p-value is below a significance threshold (e.g., 0.05), the null hypothesis is rejected, suggesting the series is stationary.
+*   **Use Cases:** Formally testing if a time series is stationary before fitting models like ARIMA, determining the necessary order of differencing (d) required to make a series stationary.
+
+**8. ACF, PACF; And its Importance in choosing the Order of the Models**
+*   **Concept:**
+    *   *Autocorrelation Function (ACF):* Measures the correlation between a time series and its lagged values (e.g., correlation between Yt and Yt-k for different lags k).
+    *   *Partial Autocorrelation Function (PACF):* Measures the correlation between a time series and its lagged values after removing the linear effects of the intermediate lags.
+    *   *Importance:* The patterns of decay in the ACF and PACF plots are characteristic of AR, MA, and ARMA processes and are used to tentatively identify the order (p, q) of these models. For AR(p), PACF cuts off after lag p; for MA(q), ACF cuts off after lag q; for ARMA(p,q), both ACF and PACF tail off.
+*   **Use Cases:** Identifying the appropriate p and q parameters for ARMA/ARIMA models, understanding the temporal dependency structure within the data.
+
+## Class 2: Time Series Analysis with Statistical Modeling
+
+**1. Which Model is Appropriate in which situation?**
+*   **Concept:** Guidance on selecting statistical models based on data properties. Stationary data without seasonality might suit ARMA. Non-stationary data often requires ARIMA (differencing). Seasonal data needs SARIMA. Data with changing volatility suggests ARCH/GARCH. Models with external factors use ARIMAX/SARIMAX.
+*   **Use Cases:** Choosing the right tool for the job based on initial data exploration (plots, decomposition, ADF tests, ACF/PACF).
+
+**2. AR (Autoregressive), MA (Moving Average), ARMA (Autoregressive Moving Average)**
+*   **Concept:** Foundational models for stationary time series.
+    *   *AR(p):* Assumes the current value is a linear combination of 'p' previous values plus white noise.
+    *   *MA(q):* Assumes the current value is a linear combination of 'q' previous error terms plus white noise.
+    *   *ARMA(p,q):* Combines both AR and MA components.
+*   **Use Cases:** Modeling stationary economic indicators, analyzing relationships between consecutive observations, forecasting short-term patterns.
+
+**3. ARIMA (Autoregressive Integrated Moving Average)**
+*   **Concept:** Extends ARMA to handle non-stationary data by incorporating an 'Integrated' component (I), which represents the differencing order (d) needed to achieve stationarity. The model is denoted as ARIMA(p,d,q).
+*   **Use Cases:** Forecasting non-stationary financial data (e.g., stock prices, indices), modeling economic variables that exhibit trends (e.g., GDP, consumption).
+
+**4. ARIMAX (ARIMA with Explanatory Variables)**
+*   **Concept:** An extension of ARIMA that includes one or more external predictor variables (exogenous variables, X). The model aims to explain and forecast the time series using both its past values/errors and the values of these external factors.
+*   **Use Cases:** Forecasting product sales using advertising expenditure as an explanatory variable, predicting electricity demand based on temperature and day of the week, modeling the impact of policy changes on economic indicators.
+
+**5. SARIMAX (Seasonal ARIMA with Explanatory Variables)**
+*   **Concept:** Combines ARIMA, seasonality, and exogenous variables. It models both non-seasonal (p,d,q) and seasonal (P,D,Q)m components, where 'm' is the seasonal period. It can also incorporate external predictors (X).
+*   **Use Cases:** Forecasting monthly retail sales considering seasonality and promotional events, modeling quarterly tourism numbers influenced by economic factors and seasonal patterns, predicting daily call center volume based on time of day, day of week, and marketing campaigns.
+
+**6. AUTO ARIMA**
+*   **Concept:** An automated approach to find the optimal orders (p,d,q)(P,D,Q)m for an ARIMA or SARIMA model. Algorithms typically search through various combinations of orders and select the best model based on information criteria like AIC or BIC.
+*   **Use Cases:** Quickly establishing a baseline ARIMA/SARIMA model, automating forecasting tasks where manual identification is impractical, useful when dealing with a large number of time series.
+
+**7. ARCH (Autoregressive Conditional Heteroskedasticity), GARCH (Generalized ARCH)**
+*   **Concept:** Models designed to capture time-varying volatility (heteroskedasticity), a common feature in financial time series where periods of high volatility tend to cluster together. 
+    *   *ARCH(p):* Models the conditional variance as a function of past squared error terms.
+    *   *GARCH(p,q):* Extends ARCH by also including past conditional variances in the model for the current variance.
+*   **Use Cases:** Modeling and forecasting stock return volatility, risk management (e.g., calculating Value at Risk), option pricing, analyzing financial market instability.
+
+**8. AIC (Akaike Information Criterion), BIC (Bayesian Information Criterion), Log Likelihood Test**
+*   **Concept:** Statistical criteria used for model selection.
+    *   *AIC/BIC:* Balance model fit (likelihood) with model complexity (number of parameters). Lower values generally indicate a better model. BIC penalizes complexity more heavily than AIC.
+    *   *Log Likelihood:* Measures the goodness of fit of a statistical model to the data. Higher log likelihood indicates a better fit.
+    *   *Likelihood Ratio Test:* Used to compare the goodness of fit of two nested models (one model is a special case of the other).
+*   **Use Cases:** Choosing the optimal orders (p,q, P,Q) for ARIMA/SARIMA/GARCH models, comparing non-nested models (using AIC/BIC), formally testing the significance of adding parameters.
+
+**9. Diagnostic Check of the Model**
+*   **Concept:** Assessing the adequacy of a fitted time series model by examining its residuals (the difference between observed values and fitted values). Ideally, residuals should resemble white noise (random, no patterns). Common checks include:
+    *   Plotting residuals over time (look for patterns).
+    *   ACF/PACF plots of residuals (look for significant autocorrelations).
+    *   Normality tests (e.g., Jarque-Bera) on residuals.
+    *   Ljung-Box test (tests the null hypothesis that residuals are independently distributed).
+*   **Use Cases:** Validating that the chosen model has captured the underlying structure of the data, identifying potential model misspecification or areas for improvement.
+
+**10. Comparing the Model Performances**
+*   **Concept:** Evaluating the forecasting accuracy of different models using a hold-out test set (data not used for model fitting). Common metrics include:
+    *   *Mean Absolute Error (MAE):* Average absolute difference between forecasts and actual values.
+    *   *Mean Squared Error (MSE):* Average squared difference (penalizes large errors more).
+    *   *Root Mean Squared Error (RMSE):* Square root of MSE (in the same units as the data).
+    *   *Mean Absolute Percentage Error (MAPE):* Average absolute percentage difference (useful for comparing across series with different scales, but sensitive to zero or near-zero actual values).
+*   **Use Cases:** Selecting the best model among several candidates based on out-of-sample forecast accuracy, quantifying the expected forecast error, comparing different forecasting strategies.
+
+## Class 3: Time Series Analysis with ML Approach (Using Prophet, XGBOOST)
+
+**1. Different Approach to TRAIN-TEST Split for Time Series Forecasting**
+*   **Concept:** Standard k-fold cross-validation is unsuitable for time series due to temporal dependency (using future data to predict the past). Appropriate methods maintain chronological order:
+    *   *Simple Train-Test Split:* Train on earlier data, test on later data.
+    *   *Rolling Forecast Origin (Walk-Forward Validation):* Train on window, predict next step, slide window forward including the actual value, repeat.
+    *   *Time Series Cross-Validation (Expanding Window):* Train on initial segment, test on next block; then expand training set to include test block, test on subsequent block, etc.
+*   **Use Cases:** Obtaining realistic estimates of model performance on unseen future data, preventing lookahead bias, tuning hyperparameters effectively for time series models.
+
+**2. Forecasting Future Data using Facebook Prophet and XGBOOST Library**
+*   **Concept:** Applying machine learning techniques to time series forecasting.
+    *   *Facebook Prophet:* An additive regression model developed by Facebook, particularly effective for business time series with multiple seasonalities (yearly, weekly, daily), holiday effects, and trend changes. It's designed to be user-friendly and robust to missing data and outliers.
+    *   *XGBoost (and other Gradient Boosting/Tree-based models):* Can be adapted for time series by creating lagged features (past values of the series) and time-derived features (e.g., day of week, month, year, time elapsed). They can capture complex non-linear relationships and interactions between features.
+*   **Use Cases:**
+    *   *Prophet:* Forecasting daily website traffic, predicting retail sales with holiday peaks, modeling energy consumption patterns.
+    *   *XGBoost:* Forecasting problems with many potential predictor variables, capturing complex interactions (e.g., weather impact on sales), scenarios where non-linear patterns dominate.
+
+**3. Comparing the Results between the Statistical Approach and ML Approach**
+*   **Concept:** Evaluating the strengths and weaknesses of traditional statistical models (ARIMA family, ES) versus modern machine learning models (Prophet, XGBoost, LSTMs etc.).
+    *   *Statistical Models:* Often more interpretable, rely on statistical assumptions (e.g., stationarity), generally perform well with clear trend/seasonality, may struggle with complex non-linearities or high dimensionality.
+    *   *ML Models:* Can handle complex patterns and non-linearities, potentially incorporate many features, less reliant on strict statistical assumptions, often require more data and careful feature engineering, can be less interpretable ('black box').
+*   **Use Cases:** Making informed decisions about which modeling approach is best suited for a specific forecasting problem based on data characteristics (length, complexity, seasonality, number of variables), performance requirements, interpretability needs, and computational resources. Comparing performance on the same dataset using appropriate metrics and validation strategies. Providing recommendations based on the comparison. 
